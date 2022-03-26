@@ -38,6 +38,8 @@ class Spaceship(pygame.sprite.Sprite):
   def update(self):
     #set movement speed
     speed = 8
+    #set a cooldown variable
+    cooldown = 500 #nilliseconds
     
     #get key press
     key = pygame.key.get_pressed()
@@ -53,6 +55,7 @@ class Spaceship(pygame.sprite.Sprite):
     if key[pygame.K_SPACE] and time_now - self.last_shot > cooldown:
       bullet = Bullets(self.rect.centerx, self.rect.top)
       bullet_group.add(bullet)
+      self.last_shot = time_now
       
     #draw health bar
     pygame.draw.rect(screen, red, (self.rect.x, (self.rect.bottom + 10), self.rect.width, 15))
@@ -70,7 +73,8 @@ class Bullets(pygame.sprite.Sprite):
     
   def update(self):
     self.rect.y -= 5
-   
+    if self.rect.bottom < 0:
+      self.kill()
 #create sprite groups
 spaceship_group = pygame.sprite.Group()
 bullet_group = pygame.sprite.Group()
